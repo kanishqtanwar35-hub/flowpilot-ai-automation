@@ -1,0 +1,22 @@
+# --- secrets: never commit these -------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
+secrets.json
+
+# --- local data -------------------------------------------------------------
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+crm_store.json
+
+# --- python -----------------------------------------------------------------
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/

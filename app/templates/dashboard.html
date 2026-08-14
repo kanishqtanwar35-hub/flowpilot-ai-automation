@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FlowPilot — AI Automation Control Room</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <div class="logo">FP</div>
+      <div>
+        <h1>FlowPilot — AI Automation Control Room</h1>
+        <p>Inbound lead &amp; support triage · webhook → Claude → CRM → notify</p>
+      </div>
+    </div>
+    <div class="pills" id="modePills"></div>
+    <button class="btn" id="themeToggle" aria-label="Toggle colour theme">Theme</button>
+  </header>
+
+  <!-- one filter row above everything it scopes -->
+  <div class="filters">
+    <div class="seg" role="group" aria-label="Date range">
+      <button data-days="7" aria-pressed="false">7d</button>
+      <button data-days="14" aria-pressed="true">14d</button>
+      <button data-days="30" aria-pressed="false">30d</button>
+    </div>
+    <select id="fTier" aria-label="Filter by tier">
+      <option value="">All tiers</option>
+      <option value="hot">Hot</option>
+      <option value="warm">Warm</option>
+      <option value="cold">Cold</option>
+      <option value="archived">Archived (spam)</option>
+    </select>
+    <select id="fChannel" aria-label="Filter by channel">
+      <option value="">All channels</option>
+      <option value="web_form">Web form</option>
+      <option value="whatsapp">WhatsApp</option>
+      <option value="email">Email</option>
+      <option value="chat_widget">Chat widget</option>
+      <option value="api">API</option>
+    </select>
+    <input type="search" id="fQuery" placeholder="Search name, company, message…" aria-label="Search leads">
+    <span class="spacer"></span>
+    <button class="btn primary" id="btnSimulate">Simulate inbound lead</button>
+    <a class="btn" href="/api/export.csv" style="text-decoration:none">Export CSV</a>
+  </div>
+
+  <!-- KPI tiles -->
+  <section class="tiles" id="tiles"></section>
+
+  <!-- charts -->
+  <section class="grid-2">
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>Inbound volume &amp; lead quality</h2>
+          <p class="sub">Leads triaged per day, and how many the workflow scored as hot.
+            Switch to Table for the per-day automation split.</p>
+        </div>
+        <span class="spacer"></span>
+        <button class="btn" data-table-toggle="throughput">Table</button>
+      </div>
+      <div id="throughput"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>Lead quality mix</h2>
+          <p class="sub">Share of leads by triage tier (ordered: hot → archived).</p>
+        </div>
+        <span class="spacer"></span>
+        <button class="btn" data-table-toggle="tiers">Table</button>
+      </div>
+      <div id="tiers"></div>
+      <div class="facts" id="tiersFacts"></div>
+    </div>
+  </section>
+
+  <section class="grid-3">
+    <div class="card">
+      <div class="card-head">
+        <div><h2>Leads by channel</h2><p class="sub">Where enquiries arrive from.</p></div>
+        <span class="spacer"></span>
+        <button class="btn" data-table-toggle="channels">Table</button>
+      </div>
+      <div id="channels"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div><h2>Top intents</h2><p class="sub">Classified by the AI extraction step.</p></div>
+        <span class="spacer"></span>
+        <button class="btn" data-table-toggle="intents">Table</button>
+      </div>
+      <div id="intents"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div><h2>Integration health</h2><p class="sub">Outbound REST / webhook calls in range.</p></div>
+      </div>
+      <div class="table-scroll" id="integrations"></div>
+    </div>
+  </section>
+
+  <!-- leads -->
+  <section class="card">
+    <div class="card-head">
+      <div>
+        <h2>Triaged leads</h2>
+        <p class="sub">Click a row to open the full workflow trace for that lead.</p>
+      </div>
+      <span class="spacer"></span>
+      <span class="pill" id="leadCount">—</span>
+    </div>
+    <div class="table-scroll" id="leadsTable"></div>
+  </section>
+
+  <footer class="foot">
+    FlowPilot v{{ version }} · Flask + SQLite + Claude · dashboard renders its own SVG, no external assets.
+  </footer>
+</div>
+
+<div class="drawer-bg" id="drawerBg"></div>
+<aside class="drawer" id="drawer" aria-label="Workflow run detail" tabindex="-1">
+  <button class="btn close" id="drawerClose">Close</button>
+  <div id="drawerBody"></div>
+</aside>
+
+<div class="tooltip" id="tooltip" role="status"></div>
+<div class="toast" id="toast"></div>
+
+<script src="{{ url_for('static', filename='charts.js') }}"></script>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

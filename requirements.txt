@@ -1,0 +1,11 @@
+# FlowPilot — AI Automation Suite
+# Python 3.10+
+
+Flask==3.0.3          # HTTP server for the webhook receiver + dashboard
+httpx==0.28.1         # outbound REST / webhook calls (timeouts + retries)
+pydantic==2.12.5      # payload validation for inbound webhooks
+python-dotenv==1.0.1  # .env loading
+anthropic==0.122.0    # Claude API (AI extraction + reply drafting)
+
+# dev / test
+pytest==8.2.0
