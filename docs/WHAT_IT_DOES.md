@@ -170,7 +170,7 @@ Only the extraction schema and the rules table move.
 ## See it in 30 seconds
 
 **Live demo (nothing to install):**
-https://claude.ai/code/artifact/5ebab5ae-4583-48da-86d5-23c4181d4516
+https://kanishqtanwar35-hub.github.io/flowpilot-ai-automation/demo.html
 
 **Or run it yourself:**
 
